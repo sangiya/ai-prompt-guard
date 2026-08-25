@@ -142,9 +142,7 @@ class StructuredExtractor(Generic[ModelT]):
         last_error = ""
 
         for attempt in range(1, self.max_attempts + 1):
-            response = self.client.complete(
-                prompt, config=self._config, system=_SYSTEM_PROMPT
-            )
+            response = self.client.complete(prompt, config=self._config, system=_SYSTEM_PROMPT)
             responses.append(response)
 
             try:
@@ -160,7 +158,9 @@ class StructuredExtractor(Generic[ModelT]):
                 )
                 logger.info(
                     "Attempt %d/%d failed validation with %d error(s)",
-                    attempt, self.max_attempts, len(exc.errors()),
+                    attempt,
+                    self.max_attempts,
+                    len(exc.errors()),
                 )
             else:
                 return ExtractionResult(

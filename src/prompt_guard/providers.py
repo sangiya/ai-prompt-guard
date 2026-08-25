@@ -118,8 +118,7 @@ class LLMClient:
         self.provider = resolve_provider(provider)
         if self.provider not in DEFAULT_MODELS:
             raise ProviderError(
-                f"unknown provider {self.provider!r}; "
-                f"expected one of {sorted(DEFAULT_MODELS)}"
+                f"unknown provider {self.provider!r}; expected one of {sorted(DEFAULT_MODELS)}"
             )
         self.model = model or os.environ.get("LLM_MODEL") or DEFAULT_MODELS[self.provider]
         backends: dict[str, Callable[..., str]] = {

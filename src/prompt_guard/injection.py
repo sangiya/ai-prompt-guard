@@ -135,9 +135,7 @@ _PATTERNS: Final[list[tuple[SignalCategory, float, Pattern[str]]]] = [
 
 _BASE64_BLOB: Final[Pattern[str]] = re.compile(r"\b[A-Za-z0-9+/]{40,}={0,2}\b")
 
-_ZERO_WIDTH: Final[frozenset[str]] = frozenset(
-    {"​", "‌", "‍", "⁠", "﻿", "­"}
-)
+_ZERO_WIDTH: Final[frozenset[str]] = frozenset({"​", "‌", "‍", "⁠", "﻿", "­"})
 
 _THRESHOLDS: Final[list[tuple[float, RiskLevel]]] = [
     (0.8, RiskLevel.HIGH),
@@ -279,9 +277,7 @@ class InjectionDetector:
                 sorted(s.category.value for s in signals),
             )
 
-        return DetectionResult(
-            text=text, score=round(score, 3), risk=risk, signals=tuple(signals)
-        )
+        return DetectionResult(text=text, score=round(score, 3), risk=risk, signals=tuple(signals))
 
     def is_safe(self, text: str, *, max_risk: RiskLevel = RiskLevel.LOW) -> bool:
         """True when ``text`` scores at or below ``max_risk``."""

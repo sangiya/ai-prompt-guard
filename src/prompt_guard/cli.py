@@ -128,8 +128,7 @@ def _run_extract(args: argparse.Namespace, text: str) -> int:
         print(result.data.model_dump_json(indent=2))
     else:
         print(f"schema   : {args.schema}")
-        print(f"attempts : {result.attempts}"
-              f"{' (repaired)' if result.required_repair else ''}")
+        print(f"attempts : {result.attempts}{' (repaired)' if result.required_repair else ''}")
         print("-" * 60)
         print(result.data.model_dump_json(indent=2))
     return 0
