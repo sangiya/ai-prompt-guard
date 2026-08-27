@@ -91,6 +91,12 @@ def _build_parser() -> argparse.ArgumentParser:
 
     subcommands.add_parser("wrap", parents=[source], help="fence untrusted text")
 
+    serve_cmd = subcommands.add_parser(
+        "serve", help="run the local web UI (requires the [web] extra)"
+    )
+    serve_cmd.add_argument("--host", default="127.0.0.1")
+    serve_cmd.add_argument("--port", type=int, default=8000)
+
     return parser
 
 
@@ -138,6 +144,20 @@ def main(argv: Sequence[str] | None = None) -> int:
     """Entry point. Returns a process exit code."""
     args = _build_parser().parse_args(argv)
     _configure_logging(args.verbose)
+
+    if args.command == "serve":
+        try:
+            import uvicorn
+
+            from .web import create_app
+        except ImportError:
+            print(
+                "the web UI needs the [web] extra: pip install 'ai-prompt-guard[web]'",
+                file=sys.stderr,
+            )
+            return 1
+        uvicorn.run(create_app(), host=args.host, port=args.port)
+        return 0
 
     try:
         text = _read_input(args.text, args.file)

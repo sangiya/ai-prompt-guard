@@ -35,7 +35,8 @@ prompt_guard/
 ├── extraction.py   Schema enforcement with a validation-repair loop
 ├── injection.py    Risk scoring and untrusted-input hardening
 ├── providers.py    Provider-agnostic client with an offline fallback
-└── cli.py          Command-line entry point
+├── web.py              Local web UI over scan/extract (optional [web] extra)
+└── cli.py                  Command-line entry point
 ```
 
 ## Install
@@ -59,12 +60,28 @@ Only `pydantic` is required at runtime. Provider SDKs are optional:
 ```bash
 pip install -e ".[anthropic]"
 pip install -e ".[openai]"
+pip install -e ".[web]"       # local web UI (see below)
 ```
 
 With no credentials the client falls back to a deterministic offline backend, so
 the full test suite runs with no keys and no network.
 
 ## Usage
+
+### Web UI
+
+```bash
+prompt-guard serve
+```
+
+Opens `http://127.0.0.1:8000`: an injection scanner with example inputs
+and per-signal detail, and a schema-extraction panel (ticket, invoice,
+contact) showing the validated result plus how many attempts it took —
+the same `InjectionDetector`/`StructuredExtractor` the CLI already
+exposed, reachable without a terminal. Single-user local tool: no
+login, no persistence beyond the process. Extraction calls whatever
+LLM provider auto-resolves (reachable Ollama, an API key, or the
+deterministic offline backend).
 
 ### Scan untrusted input
 
@@ -148,7 +165,7 @@ semantics. Anything more ambiguous is sent back to the model.
 ## Development
 
 ```bash
-pytest                    # 75 tests, no network required
+pytest                    # 81 tests, no network required
 ruff check src tests
 mypy                      # strict
 ```

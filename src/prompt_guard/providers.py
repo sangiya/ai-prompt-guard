@@ -33,7 +33,11 @@ ProviderName = Literal["auto", "anthropic", "openai", "ollama", "offline"]
 DEFAULT_MODELS: dict[str, str] = {
     "anthropic": "claude-sonnet-4-6",
     "openai": "gpt-4o-mini",
-    "ollama": "llama3.1",
+    # "llama3.2", not "llama3.1" -- the latter isn't pulled by a plain
+    # `ollama pull llama3.2` and 404s at request time instead of at
+    # provider-resolution time. Only used when nothing overrides it,
+    # so a real deployment with its own model name is unaffected.
+    "ollama": "llama3.2",
     "offline": "offline-1",
 }
 
